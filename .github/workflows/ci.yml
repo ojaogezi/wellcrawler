@@ -37,7 +37,7 @@ jobs:
         run: pip install -e .
       - name: Regenerate demo data and crawl it
         run: |
-          python examples/make_demo_data.py examples/temp(14)
+          python examples/make_demo_data.py "examples/temp(14)"
           wellcrawler crawl "examples/temp(14)" -q
           wellcrawler wells
           wellcrawler ask "which wells have gas shows?"
