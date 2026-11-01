@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wellcrawler"
+version = "0.1.0"
+description = "Crawl messy subsurface archives (LAS, checkshots, core, legacy reports), standardize records by well, and auto-draw cross-sections with full provenance."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "ojaogezi" }]
+keywords = [
+  "geology", "petrophysics", "well-logs", "las", "oil-and-gas",
+  "cross-section", "formation-tops", "data-catalog", "provenance",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+wellcrawler = "wellcrawler.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/ojaogezi/wellcrawler"
+Issues = "https://github.com/ojaogezi/wellcrawler/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

@@ -1,0 +1,6 @@
+DEPTH_TOP_m,DEPTH_BASE_m,LITHOLOGY,POROSITY_pct,PERM_mD,DESCRIPTION
+1180.5,1183.0,sandstone,18.4,235,fine-grained, well sorted, faint oil odor
+1183.0,1188.0,interbedded sand and shale,12.1,45,rippled, carbonaceous drapes
+1188.0,1191.5,sandstone,21.7,410,coarse, slightly glauconitic
+1191.5,1196.0,shale,4.2,0.01,silty, dark grey, fissile
+1196.0,1201.0,dolomite,9.8,12,finely crystalline, vuggy

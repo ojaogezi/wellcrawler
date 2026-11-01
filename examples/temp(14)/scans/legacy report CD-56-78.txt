@@ -1,0 +1,20 @@
+COMPOSITE WELL RECORD
+WELL: CD-56-78
+LSID: 14-22-056-25W4
+Operator: Fictitious Exploration Ltd.
+KB elevation 682.0 m; ground level 679.5 m; spud 1997-11-03.
+
+FORMATION TOPS (picked by hand from prints; see page 2 for shows)
+Viking .......................... 1122.0 m
+Base of Viking .................. 1156.5 m
+Basal Sand ...................... 1180.5 m
+Granite Wash .................... 1215.0 m
+DRILLING AND SHOWS REPORT
+Mud weight 1150 kg/m3 at 1100 m; raised to 1180 kg/m3 by total depth 1240 m.
+1180.5-1183.0 m: gas cut mud with moderate even-cut fluorescence and a
+rate-of-penetration break at the Basal Sand.
+1188.0-1189.5 m: oil stain and residual bitumen in ditch samples.
+1210.0 m: connection gas peak of 12 percent total gas.
+CORE AND SAMPLES
+No conventional core recovered; ditch samples at 3 m intervals.
+Hydrocarbon shows summarized on page 2.

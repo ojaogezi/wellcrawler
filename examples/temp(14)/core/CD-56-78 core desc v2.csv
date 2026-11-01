@@ -1,0 +1,5 @@
+DEPTH_TOP_m,DEPTH_BASE_m,LITHOLOGY,POROSITY_pct,PERM_mD,DESCRIPTION
+1180.5,1182.0,sandstone,15.9,180,fluorescence under UV, poor cut
+1182.0,1186.5,siltstone,8.3,5,bioturbated
+1186.5,1189.5,sandstone,19.2,320,oil stained, dead oil in pores
+1189.5,1194.0,limestone,6.5,8,skeletal wackestone
