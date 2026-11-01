@@ -161,3 +161,26 @@ def test_cli_end_to_end(demo_tree, tmp_path, capsys):
     assert main(["sources", *common]) == 0
     listing = capsys.readouterr().out
     assert "broken wrapped log.las" in listing and "failed" in listing
+
+
+def test_catalog_auto_discovery(demo_tree, tmp_path, monkeypatch, capsys):
+    """After crawling a subfolder, consuming verbs find the catalog on their own."""
+    from wellcrawler.__main__ import main
+
+    workdir = tmp_path / "work"
+    workdir.mkdir()
+    archive = workdir / "archive"
+    archive.mkdir()
+    # crawl writes <root>/.wellcrawler/catalog.db; simulate by crawling a copy
+    import shutil
+
+    shutil.copytree(demo_tree, archive / "temp(14)")
+    monkeypatch.chdir(workdir)
+    assert main(["crawl", str(archive / "temp(14)"), "-q"]) == 0
+
+    monkeypatch.chdir(workdir)  # consuming commands run from the parent dir
+    assert main(["wells"]) == 0
+    assert "AB-12-34" in capsys.readouterr().out
+
+    assert main(["ask", "which wells have gas shows?"]) == 0
+    assert "CD-56-78" in capsys.readouterr().out

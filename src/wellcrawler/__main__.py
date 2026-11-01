@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import glob
 import os
-import sqlite3
 import sys
 
 from . import __version__, query
@@ -14,8 +14,27 @@ from .xsec import render as render_xsec
 DEFAULT_CATALOG = os.path.join(".wellcrawler", "catalog.db")
 
 
-def _open(args) -> Catalog:
-    path = args.catalog
+def _find_catalog(explicit: "str | None") -> str:
+    """Locate the catalog: explicit flag > env > ./<nearby>/.wellcrawler/catalog.db."""
+    if explicit:
+        return explicit
+    env = os.environ.get("WELLCRAWLER_CATALOG")
+    if env:
+        return env
+    candidates = []
+    for depth in (0, 1, 2):
+        pattern = os.path.join(*(["*"] * depth + [".wellcrawler", "catalog.db"]))
+        candidates.extend(glob.glob(pattern))
+    if len(candidates) == 1:
+        return candidates[0]
+    if len(candidates) > 1:
+        listing = "\n  ".join(candidates)
+        sys.exit(f"multiple catalogs found:\n  {listing}\npick one with --catalog")
+    return DEFAULT_CATALOG
+
+
+def _open(explicit: "str | None") -> Catalog:
+    path = _find_catalog(explicit)
     if not os.path.exists(path):
         sys.exit(
             f"catalog not found at {path!r} — run `wellcrawler crawl <folder>` first "
@@ -39,24 +58,29 @@ def main(argv=None) -> int:
     p.add_argument("-q", "--quiet", action="store_true", help="do not list each file")
 
     p = sub.add_parser("wells", help="list wells and what data each has")
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("well", help="show everything recorded for one well")
     p.add_argument("name", help="well display name, alias, UWI or key")
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("tops", help="list formation tops (optionally filtered)")
     p.add_argument("-w", "--well", default=None)
     p.add_argument("-f", "--formation", default=None)
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("shows", help="list reported hydrocarbon shows")
     p.add_argument("-w", "--well", default=None)
     p.add_argument("--fluid", default=None, choices=["gas", "oil", "fluorescence", "show"])
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("sources", help="list every source file and its ingest status")
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("cross-section", aliases=["xsec"],
                        help="render a cross-section SVG with clickable provenance")
@@ -64,11 +88,13 @@ def main(argv=None) -> int:
     p.add_argument("-o", "--out", default="xsec.svg")
     p.add_argument("--max-depth", type=float, default=None)
     p.add_argument("--title", default=None)
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     p = sub.add_parser("ask", help="ask a plain-English question about the archive")
     p.add_argument("question", help='e.g. "which wells have gas shows?"')
-    p.add_argument("-c", "--catalog", default=DEFAULT_CATALOG)
+    p.add_argument("-c", "--catalog", default=None,
+                   help="catalog path (default: auto-discover .wellcrawler/catalog.db)")
 
     args = parser.parse_args(argv)
 
@@ -76,7 +102,7 @@ def main(argv=None) -> int:
         crawl(args.root, catalog_path=args.catalog, verbose=not args.quiet)
         return 0
 
-    cat = _open(args)
+    cat = _open(args.catalog)
 
     if args.cmd == "wells":
         print(query.list_wells(cat))

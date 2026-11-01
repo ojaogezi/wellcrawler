@@ -101,9 +101,10 @@ messy directory ──▶ classify (content sniffing)
         consume: wells · tops · shows · sources · ask · cross-section (SVG)
 ```
 
-- **Catalog**: SQLite at `<root>/.wellcrawler/catalog.db`. Re-crawling is
-  idempotent (unchanged files are skipped by hash; vanished files are
-  pruned).
+- **Catalog**: SQLite at `<root>/.wellcrawler/catalog.db`. Consuming verbs
+  auto-discover the nearest catalog (or set `WELLCRAWLER_CATALOG`), and
+  re-crawling is idempotent (unchanged files are skipped by hash; vanished
+  files are pruned).
 - **Well identity**: names are folded to `[A-Z0-9]` for merging; UWIs like
   `100/14-22-056-25W4/0` and `14-22-056-25W4` merge via their canonical
   land-grid part; display names are chosen from the most trustworthy source
